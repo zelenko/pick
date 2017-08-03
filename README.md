@@ -1,7 +1,7 @@
 
 
 ## Overview
-This BASIC code has examples of finding data in BASIC (or PICK) array.  More detailed [BASIC Documentaion](http://docs.rocketsoftware.com/nxt/gateway.dll/RKBnew20%2Funiverse%2Fprevious%20versions%2Fv11.2.3%2Funiverse_basiccommandsrefguide_v1123.pdf) is availale. 
+This BASIC code has examples of finding data in BASIC (or PICK) array.  More detailed info is available in the  [Rocket UniVerse BASIC Commands Reference](http://docs.rocketsoftware.com/nxt/gateway.dll/RKBnew20%2Funiverse%2Fprevious%20versions%2Fv11.2.3%2Funiverse_basiccommandsrefguide_v1123.pdf). 
 
 
 ### Features
