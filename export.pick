@@ -1,6 +1,6 @@
           PGM = 'VZ.EXPORT3'
-** Version# 0.0001[35] - 08/15/2017 - 09:44pm - VASILIY - eclipse
-*** V0.0001 Change - Custom Coding DYZ860 - 08/15/2017 - VASILIY - eclipse
+** Version# 0.0001[35] - 08/15/2017 - 09:44pm - ZELENKO - eclipse
+*** V0.0001 Change - Custom Coding DYZ860 - 08/15/2017 - ZELENKO - eclipse
 ***                   Exporting data for detailed analysis
 ***
 *-------------------------------------------------------------------------*
@@ -145,4 +145,4 @@ DEL:      OPEN 'MSG-OUT' TO OUT ELSE STOP
           RETURN
 
 *-------------------------------------------------------------------------*
-!VASILIY~08/15/17~21:44
+!ZELENKO~08/15/17~21:44

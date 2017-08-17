@@ -1,0 +1,17 @@
+          PGM = 'ARGUMENTS'
+** Version# 0.0002[16] - 07/11/2016 - 10:23am - ZELENKO - eclipse
+*** V0.0002 Change - Custom Coding DJY200 - 07/11/2016 - ZELENKO - eclipse
+*** V0.0001 Change - Custom Coding DJY200 - 07/07/2016 - ZELENKO - eclipse
+
+*-------------------------------------------------------------------------*          
+          GET(ARG.)FIRST
+          GET(ARG.)SECOND
+          PRINT 'SEND: ' : FIRST : ' | ' : SECOND
+         
+*-------------------------------------------------------------------------*          
+          * Send Message
+          MSG = FIRST : ' ' : SECOND
+          USR.ID = 'ZELENKOIY'
+          SEND.MESSAGE 'Phantom', USR.ID, MSG
+
+!ZELENKO~07/11/16~10:23
