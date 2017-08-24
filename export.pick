@@ -15,10 +15,6 @@
           !GOSUB PROCESS
           GOSUB PROCESS2
           !GOSUB DEL
-         * FILE.ID = 'key_user.txt'
-          *   GOSUB DEL
-          *FILE.ID = 'key_desc.txt'
-          *   GOSUB DEL
           RETURN
 
 *------------------ PRODUCTS ---------------------------------------------*
