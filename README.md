@@ -1,7 +1,7 @@
 
 
 ## Overview
-This BASIC code has examples of finding data in BASIC (or PICK) array.  More detailed info is available in the  [Rocket UniVerse BASIC Commands Reference](http://docs.rocketsoftware.com/nxt/gateway.dll/RKBnew20%2Funiverse%2Fprevious%20versions%2Fv11.2.3%2Funiverse_basiccommandsrefguide_v1123.pdf).  UniVerse is the database that powers [Eclipse ERP](https://en.wikipedia.org/wiki/Eclipse_ERP)
+This Pick/BASIC code has examples of finding data in array.  More detailed info is available in the  [Rocket UniVerse BASIC Commands Reference](http://docs.rocketsoftware.com/nxt/gateway.dll/RKBnew20%2Funiverse%2Fprevious%20versions%2Fv11.2.3%2Funiverse_basiccommandsrefguide_v1123.pdf).  UniVerse is the database that powers [Eclipse ERP](https://en.wikipedia.org/wiki/Eclipse_ERP)
 
 
 ### Features
