@@ -4,7 +4,8 @@
           GET(ARG.)NEW
           IF NEW = '0' THEN
              PRINT 'Specify which branch to add.'
-          END ELSE
+             END
+          ELSE
              GOSUB DOIT
           END
           RETURN
@@ -36,5 +37,6 @@ DOIT:     *** Check if Branch assigned, if not, then assign it to user.
              END
 
           REPEAT
+          RETURN
 *-------------------------------------------------------------------------*
-!ZELENKO~08/24/17~12:09
+!ZELENKO~08/24/17~13:03
