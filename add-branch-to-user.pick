@@ -1,0 +1,40 @@
+          PGM = 'VZ.USER.BRANCH'
+*** Add new branch to user IF user does not have it
+*-------------------------------------------------------------------------*
+          GET(ARG.)NEW
+          IF NEW = '0' THEN
+             PRINT 'Specify which branch to add.'
+          END ELSE
+             GOSUB DOIT
+          END
+          RETURN
+
+*-------------------------------------------------------------------------*
+DOIT:     *** Check if Branch assigned, if not, then assign it to user.
+          OPEN 'INITIALS' TO USER ELSE STOP
+
+          CMD = 'SELECT INITIALS WITH NO.LOGON # "1"'
+          CMD:= ' AND MESSAGE.GROUP = "" AND HOME_BR # "PT"'
+         ! CMD:= ' AND @ID = "TEST"'
+
+          EXECUTE CMD
+
+          LOOP
+             READNEXT ID ELSE EXIT
+
+             READV BR FROM USER,ID,9 ELSE BR = ''
+             CONVERT VM TO @FM IN BR
+
+             LOCATE NEW IN BR SETTING J THEN
+                PRINT ID: ' already has "':NEW:'"'
+                END
+             ELSE
+                PRINT ID: ' - inserting branch "': NEW : '"'
+                BR = INSERT(BR,J;NEW)
+                CONVERT @FM TO @VM IN BR
+                WRITEV BR ON USER,ID,9
+             END
+
+          REPEAT
+*-------------------------------------------------------------------------*
+!ZELENKO~08/24/17~12:09
