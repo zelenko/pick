@@ -10,4 +10,9 @@ This Pick/BASIC code has examples of various functionality.  Some refer to it as
 * `LOCATE`
 * `For Loop`
 
+### Syntax Highlighting
+* [Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=TravisHaley.pick)
+* [Sublime](https://github.com/jordonbrill/sublime-pickbasic/blob/master/pick.YAML-tmLanguage) [Blog post](https://www.jordonbrill.com/2015/pick-basic-syntax-highlighting-in-sublime-text-3/)
+* [Notepad++](https://sourceforge.net/p/notepad-plus/patches/92/)
+
 # [![MongoDB](https://blog.rocketsoftware.com/multivalue/wp-content/uploads/sites/8/sites/8/2017/06/UniVerse1131video.png)](http://www.rocketsoftware.com/products/rocket-u2/rocket-universe)
