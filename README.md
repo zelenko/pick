@@ -10,7 +10,7 @@ Pick is the programing language used with UniVerse database.  But PICK has many 
 * `LOCATE`
 * `For Loop`
 
-### Syntax Highlighting
+### Syntax Highlighting for PICK
 * [Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=TravisHaley.pick)
 * [Sublime](https://github.com/jordonbrill/sublime-pickbasic/blob/master/pick.YAML-tmLanguage) [Blog post](https://www.jordonbrill.com/2015/pick-basic-syntax-highlighting-in-sublime-text-3/)
 * [Notepad++](https://sourceforge.net/p/notepad-plus/patches/92/)
