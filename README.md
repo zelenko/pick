@@ -15,8 +15,6 @@ Pick is the programing language used with UniVerse database.  But PICK has many 
 * [Sublime](https://github.com/jordonbrill/sublime-pickbasic/blob/master/pick.YAML-tmLanguage) [Blog post](https://www.jordonbrill.com/2015/pick-basic-syntax-highlighting-in-sublime-text-3/)
 * [Notepad++](https://sourceforge.net/p/notepad-plus/patches/92/)
 
-# [![MongoDB](https://blog.rocketsoftware.com/multivalue/wp-content/uploads/sites/8/sites/8/2017/06/UniVerse1131video.png)](http://www.rocketsoftware.com/products/rocket-u2/rocket-universe)
-
 📂 Documentation
 ============
 Here are some links you may find helpful:
