@@ -1,58 +1,90 @@
           PGM = 'VZ.EXPORT3'
-** Version# 0.0001[35] - 08/15/2017 - 09:44pm - ZELENKO - eclipse
-*** V0.0001 Change - Custom Coding DYZ860 - 08/15/2017 - ZELENKO - eclipse
+** Version# 0.0002[14] - 10/13/2017 - 02:35pm - DEVOPS - eclipse
+*** V0.0002 Change - Custom Coding EAB230 - 10/13/2017 - DEVOPS - eclipse
+*** V0.0001 Change - Custom Coding DYZ860 - 09/21/2017 - DEVOPS - eclipse
 ***                   Exporting data for detailed analysis
 ***
 *-------------------------------------------------------------------------*
           Z = CHAR(9)
-          FILE.ID = 'products.txt'
-             GOSUB CREATE2
-          *FILE.ID = 'key_desc.txt'
-          *   GOSUB CREATE
-          *FILE.ID = 'key_template.txt'
-          *   GOSUB CREATE3
-          GOSUB SENDIT
-          !GOSUB PROCESS
-          GOSUB PROCESS2
-          !GOSUB DEL
+
+          START.TIME = TIME()
+          GOSUB P.SALES
+          PRINT 'Time: ': TIME() - START.TIME : ' seconds'
+
+          START.TIME = TIME()
+          GOSUB CREATE2
+          PRINT 'Time: ': TIME() - START.TIME : ' seconds'
+
+          START.TIME = TIME()
+          GOSUB CREATE1
+          PRINT 'Time: ': TIME() - START.TIME : ' seconds'
+
+          START.TIME = TIME()
+          GOSUB CREATE3
+          PRINT 'Time: ': TIME() - START.TIME : ' seconds'
+
+          START.TIME = TIME()
+          GOSUB MASSL
+          PRINT 'Time: ': TIME() - START.TIME : ' seconds'
+
           RETURN
 
-*------------------ PRODUCTS ---------------------------------------------*
-CREATE:   OPENSEQ 'MSG-OUT',FILE.ID TO FILE;
+*-------------------------------------------------------------------------*
+CREATE1:  FILE.ID = 'product_general.txt'
+          OPENSEQ 'MSG-OUT',FILE.ID TO FILE;
              ELSE CREATE FILE ELSE PRINT 'ERR.....'
           OPEN 'PRODUCT' TO KEYS ELSE STOP
 
-          EXECUTE 'SELECT PRODUCT WITH PRICE_LINE # "vz53BQ"'
+          CMD = 'SELECT PRODUCT WITH PRICE_LINE # "--11"'
+          !CMD = 'SELECT PRODUCT WITH PRICE_LINE = "11"'
+          !CMD = 'SELECT PRODUCT WITH @ID = "425742"'
+
+          EXECUTE CMD
+          PRINT 'File: ':FILE.ID :
+
           LOOP
              READNEXT ID ELSE EXIT
+
              READV PLINE FROM KEYS,ID,9 ELSE PLINE = ''
              READV BLINE FROM KEYS,ID,12 ELSE BLINE = ''
              READV CATEGORY FROM KEYS,ID,2 ELSE CATEGORY = ''
              READV DESC FROM KEYS,ID,1 ELSE DESC = ''
-             CONVERT VM TO ' ' IN DESC
+                CONVERT VM TO ' ' IN DESC
              @ID = ID
              SEL.BR = 'ALL'
-             LISTPRICE = SUBR('DICT.PRD.LIST.VZ',ID) ;* LIST PRICE
+             LISTPRICE = SUBR('DICT.PRD.LIST.VZ',ID)
             !LISTPRICE = SUBR('DICT.PRD.COSTS',12) ;* DOES NOT WORK
              AVGCOST = SUBR('VZ.GET.VALUE','PROD.CALC.BR',ID:'*1',12)"MR37"
              SALES = SUBR('VZ.SALES',ID,@DATE-365,@DATE)
 
              READV KEYWORDS FROM KEYS,ID,4 ELSE KEYWORDS = ''
-             CONVERT VM TO ' ' IN KEYWORDS
+                CONVERT VM TO ' ' IN KEYWORDS
 
-             LINE = ID:Z:PLINE:Z:BLINE:Z:CATEGORY:Z:SALES:Z:LISTPRICE:Z:DESC:Z:KEYWORDS:Z:AVGCOST
+             LINE = ID:Z:PLINE:Z:BLINE:Z:CATEGORY:Z:SALES:Z:LISTPRICE
+             LINE := Z:DESC:Z:KEYWORDS:Z:AVGCOST
              WRITESEQ LINE TO FILE ELSE CONTINUE
           REPEAT
+
           CLOSESEQ FILE ON ERROR PRINT 'ERROR CLOSING SEQ FILE'
-          PRINT 'Text file created.'
+
+          GOSUB SENDIT
+          GOSUB PROCESS
+          GOSUB TRASH
+
           RETURN
 
-*--------------- OHNAND QTY ----------------------------------------------*
-CREATE2:  OPENSEQ 'MSG-OUT',FILE.ID TO FILE;
+*-------------------------------------------------------------------------*
+CREATE2:  FILE.ID = 'product_onhand.txt'
+          OPENSEQ 'MSG-OUT',FILE.ID TO FILE;
              ELSE CREATE FILE ELSE PRINT 'ERR.....'
           OPEN 'PRODUCT' TO KEYS ELSE STOP
 
-          EXECUTE 'SELECT PRODUCT WITH PRICE_LINE # "vz-11"'
+          CMD = 'SELECT PRODUCT'
+          !CMD = 'SELECT PRODUCT WITH @ID = "5478"'
+
+          EXECUTE CMD
+          PRINT 'File: ':FILE.ID :
+
           LOOP
              READNEXT ID ELSE EXIT
 
@@ -73,43 +105,141 @@ CREATE2:  OPENSEQ 'MSG-OUT',FILE.ID TO FILE;
              BR$ = 21; BR21 = SUBR('DICT.PRD.ONHAND',1)
              BR$ = 22; BR22 = SUBR('DICT.PRD.ONHAND',1)
              BR$ = 'PT'; BRPT = SUBR('DICT.PRD.ONHAND',1)
+             BR$ = 60; BR60 = SUBR('DICT.PRD.ONHAND',1)
 
-             LINE = ID:Z:BR01:Z:BR02:Z:BR03:Z:BR04:Z:BR05:Z:BR07:Z:BR08:Z:BR12:Z:BR13:Z:BR14:Z:BR16:Z:BR17:Z:BR19:Z:BR21:Z:BR22:Z:BRPT
+             LINE = ID:Z:BR01:Z:BR02:Z:BR03:Z:BR04:Z:BR05:Z:BR07:Z:BR08:Z
+             LINE := BR12:Z:BR13:Z:BR14:Z:BR16:Z:BR17:Z:BR19:Z:BR21:Z:BR22
+             LINE := Z:BRPT:Z:BR60
              WRITESEQ LINE TO FILE ELSE CONTINUE
           REPEAT
+
           CLOSESEQ FILE ON ERROR PRINT 'ERROR CLOSING SEQ FILE'
-          PRINT 'Text file created.'
+
+          GOSUB SENDIT
+          GOSUB PROCESS
+          GOSUB TRASH
+
           RETURN
+
+
 *-------------------------------------------------------------------------*
-CREATE3:  OPENSEQ 'MSG-OUT',FILE.ID TO FILE                ;* Templates
-             ELSE CREATE FILE ELSE PRINT 'ERR...3'
-          OPEN 'AUTH.KEYS.TP' TO TEMP ELSE STOP
-          SELECT TEMP
+CREATE3:  FILE.ID = 'product_avgcost.txt'
+          OPENSEQ 'MSG-OUT',FILE.ID TO FILE;
+             ELSE CREATE FILE ELSE PRINT 'ERR.....'
+          OPEN 'PRODUCT' TO KEYS ELSE STOP
+
+          CMD = 'SELECT PRODUCT'
+          !CMD = 'SELECT PRODUCT WITH @ID = "425742"'
+
+          EXECUTE CMD
+          PRINT 'File: ':FILE.ID :
+
           LOOP
              READNEXT ID ELSE EXIT
-             READ DATA FROM TEMP,ID ELSE DATA = ''
-             LCOUNT = DCOUNT(DATA<1>,VM)
-             FOR J = 1 TO LCOUNT
-          LINE = ID:Z:DATA<1,J>:Z:DATA<2,J>:Z:DATA<3,J>:Z:J
-          WRITESEQ LINE TO FILE ELSE CONTINUE
-             NEXT J
+
+             @ID = ID
+             BR01 = SUBR('VZ.GET.VALUE','PROD.CALC.BR',ID:'*1',12)"MR37"
+             BR02 = SUBR('VZ.GET.VALUE','PROD.CALC.BR',ID:'*2',12)"MR37"
+             BR03 = SUBR('VZ.GET.VALUE','PROD.CALC.BR',ID:'*3',12)"MR37"
+             BR04 = SUBR('VZ.GET.VALUE','PROD.CALC.BR',ID:'*4',12)"MR37"
+             BR05 = SUBR('VZ.GET.VALUE','PROD.CALC.BR',ID:'*5',12)"MR37"
+             BR07 = SUBR('VZ.GET.VALUE','PROD.CALC.BR',ID:'*7',12)"MR37"
+             BR08 = SUBR('VZ.GET.VALUE','PROD.CALC.BR',ID:'*8',12)"MR37"
+             BR12 = SUBR('VZ.GET.VALUE','PROD.CALC.BR',ID:'*12',12)"MR37"
+             BR13 = SUBR('VZ.GET.VALUE','PROD.CALC.BR',ID:'*13',12)"MR37"
+             BR14 = SUBR('VZ.GET.VALUE','PROD.CALC.BR',ID:'*14',12)"MR37"
+             BR16 = SUBR('VZ.GET.VALUE','PROD.CALC.BR',ID:'*16',12)"MR37"
+             BR17 = SUBR('VZ.GET.VALUE','PROD.CALC.BR',ID:'*17',12)"MR37"
+             BR19 = SUBR('VZ.GET.VALUE','PROD.CALC.BR',ID:'*19',12)"MR37"
+             BR21 = SUBR('VZ.GET.VALUE','PROD.CALC.BR',ID:'*21',12)"MR37"
+             BR22 = SUBR('VZ.GET.VALUE','PROD.CALC.BR',ID:'*22',12)"MR37"
+             BRPT = SUBR('VZ.GET.VALUE','PROD.CALC.BR',ID:'*PT',12)"MR37"
+             BR60 = SUBR('VZ.GET.VALUE','PROD.CALC.BR',ID:'*60',12)"MR37"
+
+             LINE = ID:Z:BR01:Z:BR02:Z:BR03:Z:BR04:Z:BR05:Z:BR07:Z:BR08:Z
+             LINE := BR12:Z:BR13:Z:BR14:Z:BR16:Z:BR17:Z:BR19:Z:BR21:Z:BR22
+             LINE := Z:BRPT:Z:BR60
+             WRITESEQ LINE TO FILE ELSE CONTINUE
           REPEAT
-          CLOSESEQ FILE ON ERROR PRINT 'ERROR CLOSING SEQ FILE3'
+
+          CLOSESEQ FILE ON ERROR PRINT 'ERROR CLOSING SEQ FILE'
+
+          GOSUB SENDIT
+          GOSUB PROCESS
+          GOSUB TRASH
+
           RETURN
 
 *-------------------------------------------------------------------------*
-SENDIT:   EXE = "SH -c ' curl -T ":'"':"/u2/eclipse/msg-out/"
+P.SALES:  FILE.ID = 'product_sales.txt'
+          OPENSEQ 'MSG-OUT',FILE.ID TO FILE;
+             ELSE CREATE FILE ELSE PRINT 'ERR.....'
+          OPEN 'PRODUCT' TO KEYS ELSE STOP
+
+          CMD = 'SELECT PRODUCT'
+          !CMD = 'SELECT PRODUCT WITH @ID = "5478"'
+
+          EXECUTE CMD
+          PRINT 'File: ':FILE.ID :
+
+          LOOP
+             READNEXT ID ELSE EXIT
+
+             BR$ = 1; BR01 = SUBR('VZ.SALES.BR',ID,@DATE-365,@DATE)
+             BR$ = 2; BR02 = SUBR('VZ.SALES.BR',ID,@DATE-365,@DATE)
+             BR$ = 3; BR03 = SUBR('VZ.SALES.BR',ID,@DATE-365,@DATE)
+             BR$ = 4; BR04 = SUBR('VZ.SALES.BR',ID,@DATE-365,@DATE)
+             BR$ = 5; BR05 = SUBR('VZ.SALES.BR',ID,@DATE-365,@DATE)
+             BR$ = 7; BR07 = SUBR('VZ.SALES.BR',ID,@DATE-365,@DATE)
+             BR$ = 8; BR08 = SUBR('VZ.SALES.BR',ID,@DATE-365,@DATE)
+             BR$ = 12; BR12 = SUBR('VZ.SALES.BR',ID,@DATE-365,@DATE)
+             BR$ = 13; BR13 = SUBR('VZ.SALES.BR',ID,@DATE-365,@DATE)
+             BR$ = 14; BR14 = SUBR('VZ.SALES.BR',ID,@DATE-365,@DATE)
+             BR$ = 16; BR16 = SUBR('VZ.SALES.BR',ID,@DATE-365,@DATE)
+             BR$ = 17; BR17 = SUBR('VZ.SALES.BR',ID,@DATE-365,@DATE)
+             BR$ = 19; BR19 = SUBR('VZ.SALES.BR',ID,@DATE-365,@DATE)
+             BR$ = 21; BR21 = SUBR('VZ.SALES.BR',ID,@DATE-365,@DATE)
+             BR$ = 22; BR22 = SUBR('VZ.SALES.BR',ID,@DATE-365,@DATE)
+             BR$ = 'PT'; BRPT = SUBR('VZ.SALES.BR',ID,@DATE-365,@DATE)
+             BR$ = 60; BR60 = SUBR('VZ.SALES.BR',ID,@DATE-365,@DATE)
+
+             LINE = ID:Z:BR01:Z:BR02:Z:BR03:Z:BR04:Z:BR05:Z:BR07:Z:BR08:Z
+             LINE := BR12:Z:BR13:Z:BR14:Z:BR16:Z:BR17:Z:BR19:Z:BR21:Z:BR22
+             LINE := Z:BRPT:Z:BR60
+
+             WRITESEQ LINE TO FILE ELSE CONTINUE
+          REPEAT
+
+          CLOSESEQ FILE ON ERROR PRINT 'ERROR CLOSING SEQ FILE'
+
+          GOSUB SENDIT
+          GOSUB PROCESS
+          GOSUB TRASH
+
+          RETURN
+
+
+
+
+
+*-------------------------------------------------------------------------*
+*-------------------------------------------------------------------------*
+*-------------------------------------------------------------------------*
+*-------------------------------------------------------------------------*
+SENDIT:   PRINT ', sending' :
+          EXE = "SH -c ' curl -T ":'"':"/u2/eclipse/msg-out/"
           EXE := FILE.ID : '" '
-          EXE := "sftp://servername:2222/home/ftpscript/inbox/ "
-          EXE := '-u theusername:"very srong password" --insecure --proto =sftp -s':"'"
+          EXE := "sftp://SERVER:PORT/home/ftpscript/inbox/ "
+          EXE := '-u USER:"PASS" --insecure --proto =sftp -s':"'"
 
           EXECUTE EXE CAPTURING RESULTS
           IF RESULTS #'' THEN PRINT 'FTP Results: ':RESULTS
-          PRINT 'Text file was sent'
+
           RETURN
 
 *-------------------------------------------------------------------------*
-PROCESS:  URL = 'http://server/stock/insert-from-txt.php'
+PROCESS:  PRINT ', processing.'
+          URL = 'http://DATABASE/stock/insert.php'
           URL :='?mode=vas&file=':FILE.ID
 
           HTTP.TRANSFER URL,'POST',,RESP,RH,HDRS,,,RET.CODE,HTTP.STATUS
@@ -118,27 +248,26 @@ PROCESS:  URL = 'http://server/stock/insert-from-txt.php'
           FOR K=1 TO I
              PRINT RESP<K>
           NEXT K
-          Print 'Text file was processed.'
+
           RETURN
 
 *-------------------------------------------------------------------------*
-PROCESS2:  URL = 'http://server/stock/insert-onhand.php'
-          URL :='?mode=vas&file=':FILE.ID
-
-          HTTP.TRANSFER URL,'POST',,RESP,RH,HDRS,,,RET.CODE,HTTP.STATUS
-          CONVERT CHAR(10) TO AM IN RESP
-          I = DCOUNT(RESP,AM)
-          FOR K=1 TO I
-             PRINT RESP<K>
-          NEXT K
-          Print 'Text file was processed.'
-          RETURN
-
-*-------------------------------------------------------------------------*
-DEL:      OPEN 'MSG-OUT' TO OUT ELSE STOP
+TRASH:    OPEN 'MSG-OUT' TO OUT ELSE STOP
           DELETE OUT,FILE.ID
           CLOSE OUT
           RETURN
 
 *-------------------------------------------------------------------------*
-!ZELENKO~08/15/17~21:44
+MASSL:    PRINT 'Mass Load.'
+          URL = 'http://DATABASE/stock/mass-update.php'
+
+          HTTP.TRANSFER URL,'POST',,RESP,RH,HDRS,,,RET.CODE,HTTP.STATUS
+          CONVERT CHAR(10) TO AM IN RESP
+          I = DCOUNT(RESP,AM)
+          FOR K=1 TO I
+             PRINT RESP<K>
+          NEXT K
+
+          RETURN
+*-------------------------------------------------------------------------*
+!DEVOPS~10/13/17~14:35

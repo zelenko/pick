@@ -1,0 +1,52 @@
+          SUBROUTINE (RESULT,PN,SD,ED)
+** Version# 0.0004 - 10/13/2017 - 02:35pm - DEVOPS - eclipse
+*** V0.0004 Change - Custom Coding DSE328 - 10/13/2017 - DEVOPS - eclipse
+** Copied from CBP VZ.SALES Version# 0.0003[1] - 10/13/2017 - 12:37pm - DEVOPS - eclipse
+*** V0.0002 Change - Custom Coding DSB357 - 09/21/2017 - DEVOPS - eclipse
+          !PGM = "VZ.SALES"
+*** To calculate sales anywhere, NEED PRODUCT ID, START DATE, END DATE
+***
+
+        * Listing only these branches:
+          !BR$ = 1:VM:2:VM:3:VM:4:VM:5:VM:7:VM:8:VM:12:VM:13:VM:14:VM:16:VM:17:VM:19:VM:21:VM:22:VM:'PT':VM:60
+          !GET(ARG.)PROD.ID
+          !GET(ARG.)SD
+          !GET(ARG.)ED
+
+        * TEST = @DATE - 365 ;*    'MO/DA/':@YEAR4 -1
+        * SD = @DATE - 365
+        * ED = @DATE
+          @ID = PN
+
+          !RESULT = SUBR('DICT.PRD.SALES',1,6,SD,ED,1,'')
+          SUBRI = 'DICT.PRD.SALES'
+          CALL @SUBRI(RESULT,1,6,SD,ED,1,'')
+          RESULT = RESULT/100"MR2"
+
+        *   SUBROUTINE DICT.PRD.SALES (QTY,RANGE,ATTR,START.DATE,END.DATE,INC.DIR,SLS.UM)
+*---------ATTR Definition
+*         3  = Sales Qtys
+*         4  = Purchases Qtys
+*         5  = Transfers Qtys
+*         6  = Sales $
+*         7  = Purch $
+*         8  = Xfer $
+*         9  = Sales COGS$
+*        10  = Sales GP$
+*        11  = Sales GP%
+*        12  = Work Order Qtys
+*        13  = Rental Qtys
+*        14  = Work Order $
+*        15  = Rental $
+*---------Range Definition
+*         1  = User Defined
+*         2  = MTD
+*         3  = YTD
+*         4  = Fiscal MTD
+*         5  = Fiscal YTD
+*-------------------------------------------------------------------------*
+
+         ! PRINT "RESULT: ": RESULT: ' ' : TEST  : ' | ';* : AMTS<1,1>
+
+          RETURN
+!DEVOPS~10/13/17~14:35
