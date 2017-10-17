@@ -1,0 +1,107 @@
+** Version# 0.0008[8] - 06/01/2016 - 09:54pm - DEVOPS - eclipse
+** Version# 0.0009[23] - 07/07/2016 - 04:54pm - DEVOPS - eclipse
+*** V0.0009 Change - Custom Coding DJY200 - 07/07/2016 - DEVOPS - eclipse
+*** V0.0008 Change - Custom Coding DJY200 - 07/07/2016 - DEVOPS - eclipse
+*-------------------------------------------------------------------------*
+*  This is used by the UPS user defined queue
+*  Parsing UPS transactions from CSV to VZUPS file
+*-------------------------------------------------------------------------*
+          OPEN 'VZUPS' TO UPS ELSE
+             STOP
+          END
+
+          OPEN 'MSG-IN' TO IN ELSE
+             STOP
+          END
+          MSG = ''
+          SEND.TO.SUPERUSER = 0
+
+          EXAMPLE.ID = 'OZLINK3P.csv'
+          GOSUB READCSV
+          EXAMPLE.ID = 'OZLINK1B.csv'
+          GOSUB READCSV
+
+          *** Look for multiple UPS files
+         !EXECUTE 'SELECT MSG-IN WITH @ID = "2016]"'
+         !LOOP
+         !   READNEXT EXAMPLE.ID ELSE EXIT
+         !   GOSUB READCSV
+         !REPEAT
+
+          USR.ID = 'DEVOPS'
+          GOSUB SEND.MSG
+
+          *** Notify Josh if Zero inserted
+          IF SEND.TO.SUPERUSER THEN
+             USR.ID = 'SUPERUSER'
+             GOSUB SEND.MSG
+          END
+
+          *** Remove old UPS records
+          FM = CHAR(254)
+          OLDUPS = OCONV(@DATE-31,"D4/")
+          COMMAND='SELECT VZUPS WITH INSERT.DATE <=':OLDUPS:FM
+          COMMAND := 'DELETE VZUPS'
+          EXECUTE COMMAND
+*------------------------------------------------------------------------*
+READCSV:  *** Start CSV Processing
+          READ EXAMPLE FROM IN,EXAMPLE.ID ELSE EXAMPLE = 'NONE'
+          IN.COUNT = DCOUNT(EXAMPLE,AM)
+          EXAMPLE = CHANGE(EXAMPLE,'","','|')
+          EXAMPLE = CHANGE(EXAMPLE,'"','')
+
+          *** Start with Second line to end of document
+          FOR J = 2 TO IN.COUNT
+             COLUMN.COUNT = DCOUNT(EXAMPLE<J>,'|')
+             NEWID = FIELD(EXAMPLE<J>,'|',1)
+             REC = ""
+             I = 2
+            !REC<1> = OCONV(DATE(), 'D4/')
+             REC<1,1> = DATE()
+             REC<1,2> = TIME()
+
+             *** Loop through records in each line
+             FOR L = 2 TO COLUMN.COUNT
+                VALUE = FIELD(EXAMPLE<J>,'|',L)
+                REC<I> = VALUE
+                I+=1
+             NEXT L
+
+             WRITE REC ON UPS,NEWID
+          NEXT J
+
+          *** Delete processed CSV file
+          DELETE IN,EXAMPLE.ID
+
+          MSG := 'Records Added: ':IN.COUNT-1:' from ':EXAMPLE.ID: "; "
+          SEND.TO.SUPERUSER = (IN.COUNT-1 = 0)
+
+          RETURN
+*-------------------------------------------------------------------------*
+          PGM = 'VZ.UPS'
+          ERR.MSG = ''
+
+*-------------------------------------------------------------------------*
+          *** Phantom Process? Yes or NO
+          PHANTOM.PROC = ( @TTY = 'phantom' )
+          SEND.EMAILS  = PHANTOM.PROC
+
+*-------------------------------------------------------------------------*
+HALT:     IF ERR.MSG THEN
+             MSG = ERR.MSG;    GOSUB SEND.MSG
+          END
+
+          IF PHANTOM.PROC THEN
+             UT.PH.CLEANUP
+             STOP
+          END
+
+          RETURN
+
+*-------------------------------------------------------------------------*
+SEND.MSG:       *** Sends message to user
+*-------------------------------------------------------------------------*
+             SEND.MESSAGE 'Phantom', USR.ID, MSG
+          RETURN
+*-------------------------------------------------------------------------*
+!DEVOPS~07/07/16~16:54
