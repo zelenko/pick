@@ -1,0 +1,57 @@
+PGM ='VZ.PO.NO.COGS'
+** Version# 0.0002[30] - 10/16/2017 - 07:58pm - DEVOPS - eclipse
+*** V0.0002 Change - Custom Coding DYI711 - 10/16/2017 - DEVOPS - eclipse
+*** V0.0001 Change - Custom Coding DYI711 - 10/16/2017 - DEVOPS - eclipse
+          !PRINT 'D ':OCONV(DATE(),"D4/")
+OPEN 'ORDER.QUEUE' TO OQ ELSE
+          STOP
+   END
+
+CMD = 'SELECT ORDER.QUEUE WITH @ID = "P]" AND STAT = "O" AND ORDER.DATE = "':OCONV(DATE(),"D4/"):'" AND PROD.PO.UNITCOST = "0.00"'
+EXECUTE CMD
+
+!PRINTER.ON 'HOLD','PO WITH NO COGS ': TIME(),'JURISDICTIONS':VM:'LINE 2'
+
+LOOP
+          READNEXT ID ELSE EXIT
+          READV WRITER FROM OQ,ID,9 ELSE WRITER = ''
+          @ID = FIELD(ID,'.',1)
+          !DATES = FIELD(ID,'.',2)
+          !LINES = SUBR('DICT.GET.LEDGER.VALUE', 'LI.DESC')
+          !SUBRI = 'DICT.GET.LEDGER.VALUE'
+          !CALL @SUBRI(LINES,'LI.DESC')
+          !LCOUNT7 = DCOUNT(LINES,VM)
+          !PRICES = SUBR('DICT.GET.LEDGER.VALUE', 'LI.UNIT')
+          !PRINT @ID: ' ': WRITER: ' ': OCONV(DATES,'D4/'): ' '
+
+
+          !PRINT @ID:' WRITER: ':WRITER
+          NAME = SUBR('VZ.GET.VALUE','INITIALS',WRITER,3)
+          MSG = NAME:' created a PO with zero cost: ':@ID
+
+          USR.ID = 'DEVOPS'
+             GOSUB SEND.MSG
+
+          USR.ID = 'JOHN'
+             GOSUB SEND.MSG
+
+          USR.ID = WRITER
+             GOSUB SEND.MSG
+
+          !FOR I=1 TO LCOUNT7
+
+          !   PRINT I:'   ':' - ':LINES<1,I>
+          !NEXT I
+REPEAT
+
+!PRINTER.OFF DOC.ID
+RETURN
+
+
+*-------------------------------------------------------------------------*
+SEND.MSG:       *** Sends message to user
+*-------------------------------------------------------------------------*
+             SEND.MESSAGE 'Phantom', USR.ID, MSG
+          RETURN
+*-------------------------------------------------------------------------*
+!DEVOPS~10/16/17~19:58
