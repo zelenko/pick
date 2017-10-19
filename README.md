@@ -27,7 +27,6 @@ Pick is the programing language used with UniVerse database.  But PICK has many 
 ---
 
 ### Documentation
-============
 Here are some links you may find helpful:
 
 | Name | Description |
