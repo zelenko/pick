@@ -1,8 +1,15 @@
+### Table of Contents
+1. **[Overview](#overview)**
+2. **[Features](#features)**
+3. **[Syntax Highlighting for PICK](#syntax-highlighting-for-pick)**
+4. **[Documentation](#documentation)**
 
+---
 
-## Overview
+### Overview
 Pick is the programing language used with UniVerse database.  But PICK has many flavors.  The one PICK flavor used with Universe is  [UniBASIC](https://github.com/zelenko/pick/wiki).  More detailed info on it is available in the  [Rocket UniVerse BASIC Commands Reference](http://docs.rocketsoftware.com/nxt/gateway.dll/RKBnew20%2Funiverse%2Fprevious%20versions%2Fv11.2.3%2Funiverse_basiccommandsrefguide_v1123.pdf).  UniVerse is the database that powers [Eclipse ERP](https://en.wikipedia.org/wiki/Eclipse_ERP).  
 
+---
 
 ### Features
 
@@ -10,12 +17,16 @@ Pick is the programing language used with UniVerse database.  But PICK has many 
 * `LOCATE`
 * `For Loop`
 
+---
+
 ### Syntax Highlighting for PICK
 * [Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=TravisHaley.pick)
 * [Sublime](https://github.com/jordonbrill/sublime-pickbasic/blob/master/pick.YAML-tmLanguage) [Blog post](https://www.jordonbrill.com/2015/pick-basic-syntax-highlighting-in-sublime-text-3/)
 * [Notepad++](https://sourceforge.net/p/notepad-plus/patches/92/)
 
-📂 Documentation
+---
+
+### Documentation
 ============
 Here are some links you may find helpful:
 
@@ -30,7 +41,9 @@ Here are some links you may find helpful:
 | [Calling a Universe program](http://www.unix.com/unix-for-advanced-and-expert-users/101129-calling-universe-program.html) | Forum |
 | [Caché MultiValue Basic Reference](http://docs.intersystems.com/ens20121/csp/docbook/DocBook.UI.Page.cls?KEY=RVBS_preface) | "This book provides reference material for various elements of Caché MVBasic: commands, functions, system variables, constants, operators, and symbols". |
 
-## 📖 Contribution
+---
+
+### 📖 Contribution
 
 | [![twitter/vzelenko](https://avatars0.githubusercontent.com/u/30665185?v=4&s=50)](https://twitter.com/vzelenko "Follow @vzelenko on Twitter") |
 |---|
