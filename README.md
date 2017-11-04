@@ -39,6 +39,7 @@ Here are some links you may find helpful:
 | [Rocket UniVerse Guide for Pick Users](http://docs.rocketsoftware.com/nxt/gateway.dll/RKBnew20%2Funiverse%2Fprevious%20versions%2Fv11.2.3%2Funiverse_pickuserguide_v1123.pdf) | Published in April 2014 |
 | [Calling a Universe program](http://www.unix.com/unix-for-advanced-and-expert-users/101129-calling-universe-program.html) | Forum |
 | [Caché MultiValue Basic Reference](http://docs.intersystems.com/ens20121/csp/docbook/DocBook.UI.Page.cls?KEY=RVBS_preface) | "This book provides reference material for various elements of Caché MVBasic: commands, functions, system variables, constants, operators, and symbols". |
+| [Guide to the UniVerse Editor.](https://docs.rocketsoftware.com/nxt/gateway.dll/RKBnew20%2Funiverse%2Fprevious%20versions%2Fv11.2.3%2Funiverse_universeeditoruserguide_v1123.pdf) | Published in 2013 by Rocket Software for Rocket UniVerse V11.2. |
 
 ---
 
