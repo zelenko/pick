@@ -20,10 +20,10 @@ Pick is the programing language used with UniVerse database.  But PICK has many 
 ---
 
 ### Syntax Highlighting for PICK
-* [Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=TravisHaley.pick)
+* [Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=TravisHaley.pick) Pick Basic Syntax Highlighting and language support
 * [Sublime](https://github.com/jordonbrill/sublime-pickbasic/blob/master/pick.YAML-tmLanguage) [Blog post](https://www.jordonbrill.com/2015/pick-basic-syntax-highlighting-in-sublime-text-3/)
-* [Notepad++](https://sourceforge.net/p/notepad-plus/patches/92/)
-
+* [Notepad++](https://sourceforge.net/p/notepad-plus/patches/92/) User defined Language for the Universe (can be addapted easily to Unidata or Pick languages).
+* [sublime-pick](https://github.com/JacobBennett/sublime-pickbasic) A Sublime Text package that does syntax highlighting for PICK Basic
 ---
 
 ### Documentation and Resources
