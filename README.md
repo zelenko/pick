@@ -26,7 +26,7 @@ Pick is the programing language used with UniVerse database.  But PICK has many 
 * [sublime-pick](https://github.com/JacobBennett/sublime-pickbasic) A Sublime Text package that does syntax highlighting for PICK Basic
 ---
 
-### Documentation and Resources
+### Documentation
 
 | Name | Description |
 | :---- | :---- |
